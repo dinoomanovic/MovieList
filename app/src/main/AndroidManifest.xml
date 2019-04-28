@@ -17,7 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AutoComplete" />
+        <activity android:name=".CoreActivity" />
+        <activity android:name=".AutoCompleteActivity" />
     </application>
 
 </manifest>
