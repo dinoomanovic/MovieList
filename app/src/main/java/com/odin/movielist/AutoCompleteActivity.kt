@@ -1,6 +1,7 @@
 package com.odin.movielist
 
 import android.os.Bundle
+import android.view.MenuItem
 
 /**
  * Created by Dino Omanovic on Apr 27, 2019
@@ -9,7 +10,21 @@ import android.os.Bundle
 class AutoCompleteActivity : CoreActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.autocomplete_activity)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         replaceFragment(AutoCompleteFragment())
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.getItemId() === android.R.id.home)
+        // Press Back Icon
+        {
+            finish()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 }

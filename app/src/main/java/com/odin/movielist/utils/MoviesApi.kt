@@ -13,7 +13,8 @@ interface MoviesApi {
     @GET("/")
     fun getMovies(
             @Query("s") movieName: String,
-            @Query("type") movieType: String
+            @Query("type") movieType: String,
+            @Query("apikey") apiKey: String
 
     ): Call<Movies>
 }

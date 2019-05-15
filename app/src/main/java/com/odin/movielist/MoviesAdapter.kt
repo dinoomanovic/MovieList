@@ -17,10 +17,6 @@ import com.squareup.picasso.Picasso
  */
 
 class MoviesAdapter(context: Activity, private val listData: ArrayList<Search>) : ArrayAdapter<Search>(context, 0, listData), Filterable {
-    private val layoutInflater: LayoutInflater? = null
-
-    init {
-    }
 
     override fun getCount(): Int {
         return listData.size
@@ -40,11 +36,11 @@ class MoviesAdapter(context: Activity, private val listData: ArrayList<Search>) 
         val holder: ViewHolder
         if (adapterView == null) {
 
-            adapterView = layoutInflater?.inflate(R.layout.movieslist, parent, false)
+            adapterView = LayoutInflater.from(context).inflate(R.layout.movieslist, parent, false)
             holder = ViewHolder()
             val view = LayoutInflater.from(context).inflate(R.layout.autocomplete_fragment, null)
 
-            holder.autoCompleteText = view.findViewById(R.id.textView) as AutoCompleteTextView
+            holder.autoCompleteText = view.findViewById(R.id.autoCompleteTextView) as AutoCompleteTextView
             holder.movieTitle = adapterView!!.findViewById(R.id.movieTitle) as TextView
             holder.movieYear = adapterView.findViewById(R.id.movieYear) as TextView
             holder.movieImage = adapterView.findViewById(R.id.movieImage) as ImageView

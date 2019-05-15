@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ListView
 import com.odin.movielist.models.Movies
 import com.odin.movielist.models.Search
 import com.odin.movielist.utils.CoreFragment
@@ -29,23 +28,22 @@ class MainFragment : CoreFragment<MainViewModel>() {
     override fun bindView(viewModel: MainViewModel) {
         val adapter = MoviesRestAdapter()
         val client = adapter.createService()
-        val call = client.getMovies("Revenant", moviesType)
-        //   call.enqueue(new GetMovies(moviesList));
+        val call = client.getMovies("Revenant", moviesType, apiKey)
+//        call.enqueue(GetMovies())
         progressBar.visibility = View.GONE
     }
 
-    inner class GetMovies(private val moviesList: ListView) : Callback<Movies> {
+    inner class GetMovies : Callback<Movies> {
         override fun onResponse(call: Call<Movies>, response: Response<Movies>) {
             movies = response.body()
             for (i in 0 until movies.search!!.size) {
                 moviesArrayList.add(movies.search!![i])
             }
             moviesAdapter = MoviesAdapter(this@MainFragment.activity, moviesArrayList)
-            Log.d("Call Response: ", call.toString() + " " + response.toString() + " " + response.body().toString() + " " + response.message())
-            //            Log.d("WeatherData: ", weatherData.getCity().getName() + " " + weatherData.getList().get(0).getMain().getTemp()+ " " +weatherData.getList().get(0).getWeather());
+            Log.d("Call Response: ", "$call $response ${response.body()} ${response.message()}")
             Log.d("MoviesArrayList: ", moviesArrayList.toString())
             Log.d("MoviesAdapter: ", moviesAdapter.toString())
-            moviesList.onItemLongClickListener =
+            movieList.onItemLongClickListener =
                     AdapterView.OnItemLongClickListener { _, _, position, _ ->
                         AlertDialog.Builder(this@MainFragment.activity)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -61,7 +59,7 @@ class MainFragment : CoreFragment<MainViewModel>() {
 
                         true
                     }
-            moviesList.adapter = moviesAdapter
+            movieList.adapter = moviesAdapter
             // autoCompleteTextView.setAdapter(moviesAdapter);
             progressBar.visibility = View.GONE
             moviesAdapter.notifyDataSetChanged()
@@ -79,5 +77,6 @@ class MainFragment : CoreFragment<MainViewModel>() {
 
     companion object {
         const val moviesType = "movie"
+        const val apiKey = "f0c03065"
     }
 }
