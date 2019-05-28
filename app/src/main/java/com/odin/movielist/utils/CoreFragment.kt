@@ -1,5 +1,6 @@
 package com.odin.movielist.utils
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.os.Bundle
 import android.support.annotation.CallSuper
@@ -13,12 +14,12 @@ import com.odin.movielist.MainActivity
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 abstract class CoreFragment<VIEW_MODEL : ViewModel> : Fragment() {
     abstract val layoutResId: Int
     abstract fun bindView(viewModel: VIEW_MODEL)
     abstract fun provideViewModel(): VIEW_MODEL
     private lateinit var viewModel: VIEW_MODEL
+    var dbState = MutableLiveData<State>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,6 +48,10 @@ abstract class CoreFragment<VIEW_MODEL : ViewModel> : Fragment() {
 
     protected fun closeActivity() {
         (activity as MainActivity).finish()
+    }
+
+    enum class State {
+        INSERT, CLEAR
     }
 
     companion object {

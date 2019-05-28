@@ -11,7 +11,6 @@ import android.view.MenuItem
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 open class CoreActivity : AppCompatActivity() {
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,6 +48,5 @@ open class CoreActivity : AppCompatActivity() {
         } catch (ex: Exception) {
             this.finish()
         }
-
     }
 }

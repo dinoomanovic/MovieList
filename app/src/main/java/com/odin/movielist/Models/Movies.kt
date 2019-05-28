@@ -7,7 +7,6 @@ import java.io.Serializable
 /**
  * Created by Dino Omanovic on Mar 16, 2017
  */
-
 class Movies
 /**
  *

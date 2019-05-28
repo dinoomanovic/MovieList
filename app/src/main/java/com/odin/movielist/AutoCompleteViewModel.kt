@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProvider
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 class AutoCompleteViewModel : ViewModel() {
     class Factory : ViewModelProvider.NewInstanceFactory() {
         @Suppress("UNCHECKED_CAST")

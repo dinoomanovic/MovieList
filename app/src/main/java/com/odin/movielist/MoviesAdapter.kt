@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso
 /**
  * Created by Dino Omanovic on Mar 16, 2017
  */
-
 class MoviesAdapter(context: Activity, private val listData: ArrayList<Search>) : ArrayAdapter<Search>(context, 0, listData), Filterable {
 
     override fun getCount(): Int {
@@ -51,14 +50,14 @@ class MoviesAdapter(context: Activity, private val listData: ArrayList<Search>) 
         }
 
         //  holder.autoCompleteText.setText(getItem(position).getTitle()+ " " + getItem(position).getYear());
-        holder.movieTitle!!.text = getItem(position)!!.title
-        if (getItem(position)!!.poster != "N/A") {
-            Picasso.with(context).load(getItem(position)!!.poster).resize(200, 200).into(holder.movieImage)
+        holder.movieTitle!!.text = getItem(position)!!.Title
+        if (getItem(position)!!.Poster != "N/A") {
+            Picasso.with(context).load(getItem(position)!!.Poster).resize(200, 200).into(holder.movieImage)
         } else {
             Picasso.with(context).load(android.R.drawable.ic_menu_help).resize(200, 200).into(holder.movieImage)
 
         }
-        holder.movieYear!!.text = getItem(position)!!.year
+        holder.movieYear!!.text = getItem(position)!!.Year
 
         return adapterView
     }

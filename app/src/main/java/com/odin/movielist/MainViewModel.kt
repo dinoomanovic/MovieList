@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProvider
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 class MainViewModel : ViewModel() {
 
     class Factory : ViewModelProvider.NewInstanceFactory() {

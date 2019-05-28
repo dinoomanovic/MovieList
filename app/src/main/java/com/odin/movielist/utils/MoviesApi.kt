@@ -8,13 +8,11 @@ import retrofit2.http.Query
 /**
  * Created by Dino Omanovic on Mar 16, 2017
  */
-
 interface MoviesApi {
     @GET("/")
     fun getMovies(
             @Query("s") movieName: String,
             @Query("type") movieType: String,
             @Query("apikey") apiKey: String
-
     ): Call<Movies>
 }

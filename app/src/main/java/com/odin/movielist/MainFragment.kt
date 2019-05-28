@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.odin.movielist.models.Movies
+import com.odin.movielist.models.MoviesDatabase
+import com.odin.movielist.models.MoviesResponseDao
 import com.odin.movielist.models.Search
 import com.odin.movielist.utils.CoreFragment
 import com.odin.movielist.utils.MoviesRestAdapter
 import kotlinx.android.synthetic.main.main_fragment.*
+import org.jetbrains.anko.doAsync
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,13 +20,14 @@ import retrofit2.Response
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 class MainFragment : CoreFragment<MainViewModel>() {
     override val layoutResId: Int = R.layout.main_fragment
 
     var moviesArrayList = ArrayList<Search>()
     lateinit var movies: Movies
     lateinit var moviesAdapter: MoviesAdapter
+    private var db: MoviesDatabase? = null
+    private var moviesResponseDao: MoviesResponseDao? = null
 
     override fun bindView(viewModel: MainViewModel) {
         val adapter = MoviesRestAdapter()
@@ -31,6 +35,50 @@ class MainFragment : CoreFragment<MainViewModel>() {
         val call = client.getMovies("Revenant", moviesType, apiKey)
 //        call.enqueue(GetMovies())
         progressBar.visibility = View.GONE
+
+        doAsync {
+            db = MoviesDatabase.invoke(context!!)
+            moviesResponseDao = db?.moviesResponseDao()
+            moviesArrayList.addAll(moviesResponseDao!!.getMoviesResponse())
+            moviesAdapter = MoviesAdapter(activity!!, moviesArrayList)
+            movieList.adapter = moviesAdapter
+            progressBar.visibility = View.GONE
+            moviesAdapter.notifyDataSetChanged()
+        }
+        movieList.onItemLongClickListener =
+                AdapterView.OnItemLongClickListener { _, _, position, _ ->
+                    AlertDialog.Builder(context!!)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Are you sure ?")
+                            .setMessage("Do you want to delete this item ?")
+                            .setPositiveButton("Yes") { _, _ ->
+                                moviesArrayList.removeAt(position)
+                                doAsync {
+                                    moviesResponseDao?.deleteMovie(moviesArrayList[position])
+                                }
+                                moviesAdapter.notifyDataSetChanged()
+                                //   SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.example.pi.notesapp", Context.MODE_PRIVATE);
+                                //    HashSet<String> set = new HashSet(MainActivity.notes);
+                                //   sharedPreferences.edit().putStringSet("notes", set).apply();
+                            }.setNegativeButton("No", null).show()
+
+                    true
+                }
+//        observeDatabaseUpdates()
+    }
+
+    private fun observeDatabaseUpdates() {
+//        dbState.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                State.INSERT -> {
+//                    val movies = moviesResponseDao?.getMoviesResponse()!![0].Title
+//                    Toast.makeText(context, movies, Toast.LENGTH_LONG).show()
+////                    Log.d(TAG, moviesResponseDao!!.getMoviesResponse()[0].toString())
+//                }
+//                else -> {
+//                }
+//            }
+//        })
     }
 
     inner class GetMovies : Callback<Movies> {
@@ -39,13 +87,13 @@ class MainFragment : CoreFragment<MainViewModel>() {
             for (i in 0 until movies.search!!.size) {
                 moviesArrayList.add(movies.search!![i])
             }
-            moviesAdapter = MoviesAdapter(this@MainFragment.activity, moviesArrayList)
+            moviesAdapter = MoviesAdapter(activity!!, moviesArrayList)
             Log.d("Call Response: ", "$call $response ${response.body()} ${response.message()}")
             Log.d("MoviesArrayList: ", moviesArrayList.toString())
             Log.d("MoviesAdapter: ", moviesAdapter.toString())
             movieList.onItemLongClickListener =
                     AdapterView.OnItemLongClickListener { _, _, position, _ ->
-                        AlertDialog.Builder(this@MainFragment.activity)
+                        AlertDialog.Builder(activity!!)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setTitle("Are you sure ?")
                                 .setMessage("Do you want to delete this item ?")
@@ -76,6 +124,7 @@ class MainFragment : CoreFragment<MainViewModel>() {
                     .get(MainViewModel::class.java)
 
     companion object {
+        const val TAG = "MainFragment"
         const val moviesType = "movie"
         const val apiKey = "f0c03065"
     }

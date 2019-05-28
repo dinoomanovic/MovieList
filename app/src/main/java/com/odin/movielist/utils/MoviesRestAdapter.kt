@@ -7,7 +7,6 @@ import retrofit2.Retrofit
 /**
  * Created by Dino Omanovic on Mar 16, 2017
  */
-
 class MoviesRestAdapter {
     fun createService(): MoviesApi {
         return retrofit.create(MoviesApi::class.java)

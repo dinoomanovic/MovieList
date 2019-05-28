@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.odin.movielist.models.Movies
+import com.odin.movielist.models.MoviesDatabase
+import com.odin.movielist.models.MoviesResponseDao
 import com.odin.movielist.models.Search
 import com.odin.movielist.utils.CoreFragment
 import com.odin.movielist.utils.MoviesRestAdapter
@@ -20,9 +22,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Dino Omanovic on Apr 27, 2019
  */
-
 class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
-
     override val layoutResId: Int = R.layout.autocomplete_fragment
 
     var moviesArrayList: ArrayList<Search> = ArrayList()
@@ -33,6 +33,8 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
     var client = adapter.createService()
     lateinit var call: Call<Movies>
     var query: String = ""
+    private var db: MoviesDatabase? = null
+    private var moviesResponseDao: MoviesResponseDao? = null
 
     override fun bindView(viewModel: AutoCompleteViewModel) {
         doAsync {
@@ -41,6 +43,9 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
     }
 
     private fun bindTextChangeListener() {
+        if (activity == null) return
+        db = MoviesDatabase.invoke(context!!)
+        moviesResponseDao = db?.moviesResponseDao()
         autoCompleteTextView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
@@ -56,7 +61,6 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
                     timer!!.cancel()
                 }
                 query = s.toString()
-
                 //call = client.getMovies(query,moviesType);
             }
 
@@ -69,7 +73,7 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
 
                         call.enqueue(object : Callback<Movies> {
                             override fun onResponse(call: Call<Movies>, response: Response<Movies>) {
-
+                                if (activity == null) return
                                 movies = response.body()
                                 moviesArrayList.clear()
                                 if (movies.search == null) {
@@ -81,7 +85,7 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
 
                                         moviesArrayList.add(movies.search!![i])
                                     }
-                                moviesAdapter = MoviesAdapter(activity, moviesArrayList)
+                                moviesAdapter = MoviesAdapter(activity!!, moviesArrayList)
                                 moviesAdapter.notifyDataSetChanged()
 
                                 Log.d("Call Response2: ", "$call $response ${response.body()} ${response.message()}")
@@ -93,14 +97,16 @@ class AutoCompleteFragment : CoreFragment<AutoCompleteViewModel>() {
                                 autoCompleteTextView.setAdapter(moviesAdapter)
                                 autoCompleteTextView.showDropDown()
                                 autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-                                    run {
-                                        Toast.makeText(
-                                                context,
-                                                moviesArrayList[position].title,
-                                                Toast.LENGTH_LONG
-                                        ).show()
-                                        autoCompleteTextView.text.clear()
+                                    Toast.makeText(
+                                            context,
+                                            moviesArrayList[position].Title,
+                                            Toast.LENGTH_LONG
+                                    ).show()
+                                    doAsync {
+                                        moviesResponseDao!!.insertMovie(movies.search!![position])
+                                        dbState.value = (State.INSERT)
                                     }
+                                    autoCompleteTextView.text.clear()
                                 }
                             }
 
