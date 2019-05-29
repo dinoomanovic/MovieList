@@ -1,11 +1,52 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#323232</item>
         <item name="colorPrimaryDark">#212121</item>
         <item name="colorAccent">#dcdccc</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
+
+    <declare-styleable name="ExpandableBottomBarItem">
+        <attr name="android:id" />
+        <attr name="android:title" />
+        <attr name="icon" format="reference" />
+        <attr name="color" format="reference|color" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableBottomBar">
+        <attr name="itemInactiveColor" format="color" />
+        <attr name="itemBackgroundCornerRadius" format="dimension" />
+        <attr name="itemBackgroundOpacity" format="float" />
+        <attr name="transitionDuration" format="integer" />
+        <attr name="elevation" format="dimension" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="backgroundCornerRadius" format="dimension" />
+
+        <attr name="item_vertical_margin" format="dimension" />
+        <attr name="item_horizontal_margin" format="dimension" />
+        <attr name="item_vertical_padding" format="dimension" />
+        <attr name="item_horizontal_padding" format="dimension" />
+
+        <attr name="items" format="reference" />
+    </declare-styleable>
+
+    <style name="ExpandableBottomBar">
+        <item name="backgroundColor">#FFF</item>
+        <item name="backgroundCornerRadius">0dp</item>
+        <item name="itemInactiveColor">#000</item>
+        <item name="itemBackgroundCornerRadius">30dp</item>
+        <item name="itemBackgroundOpacity">0.2</item>
+        <item name="transitionDuration">100</item>
+        <item name="item_vertical_margin">24dp</item>
+        <item name="item_horizontal_margin">5dp</item>
+        <item name="item_vertical_padding">10dp</item>
+        <item name="item_horizontal_padding">15dp</item>
+    </style>
+
+    <attr name="expandableButtonBarDefaultStyle" format="reference" />
 
 </resources>

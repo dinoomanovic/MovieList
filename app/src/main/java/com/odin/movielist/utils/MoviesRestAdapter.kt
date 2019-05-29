@@ -13,7 +13,7 @@ class MoviesRestAdapter {
     }
 
     companion object {
-        private val BASE_URL = "http://www.omdbapi.com/"
+        private val BASE_URL = "https://www.omdbapi.com/"
         private val builder = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
         private val retrofit = builder.build()
         private val httpClient = OkHttpClient.Builder()

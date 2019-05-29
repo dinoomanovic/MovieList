@@ -5,15 +5,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/searchMovies"
-
         android:enabled="true"
-
         android:icon="@android:drawable/ic_menu_search"
         android:showAsAction="always"
         android:title="Search"
         android:visible="true"
         app:showAsAction="always"
         tools:ignore="AppCompatResource" />
-
-
 </menu>
